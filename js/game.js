@@ -136,6 +136,17 @@ var setData = function(){
 	}
 
 }
+// rotate function 
+
+var rotate = function () {
+    if (cur.canRotate(isValid)) {
+      clearData();
+      cur.rotate();
+      setData();
+      refreshDiv(gameData, gameDivs);
+    }
+  }
+
 
 //  down function 
 
@@ -145,7 +156,11 @@ var down = function(){
 		cur.down();
 		setData();
 		refreshDiv(gameData,gameDivs);
-	}	
+		return true;
+
+	} else {
+		return false;
+	}
 }
 
 
@@ -200,6 +215,10 @@ var init = function(doms){
   this.down = down;
   this.left = left;
   this.right = right;
+  this.rotate = rotate;
+  this.fall = function(){
+  	while(down());
+  }
 
 
 }

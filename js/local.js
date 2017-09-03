@@ -6,6 +6,7 @@ var Local = function(){
 	var bindKeyEvent = function(){
 		document.onkeydown = function(e){
 			if(e.keyCode === 38) { //up
+				game.rotate();
 
 			} else if (e.keyCode === 39){ //right
 				game.right();
@@ -19,6 +20,7 @@ var Local = function(){
 				game.left();
 
 			} else if (e.keyCode === 32){// space 
+				game.fall();
 
 			}
 		}
