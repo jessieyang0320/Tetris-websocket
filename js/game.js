@@ -141,14 +141,34 @@ var setData = function(){
 
 var down = function(){
 	if(cur.canDown(isValid)){
-
 		clearData();
 		cur.down();
 		setData();
 		refreshDiv(gameData,gameDivs);
-	}
-	
+	}	
+}
 
+
+//  left function
+
+var left = function(){
+	if(cur.canLeft(isValid)){
+		clearData();
+		cur.left();
+		setData();
+		refreshDiv(gameData,gameDivs);
+	}	
+}
+
+//  right funciton 
+
+var right = function(){
+	if(cur.canRight(isValid)){
+		clearData();
+		cur.right();
+		setData();
+		refreshDiv(gameData,gameDivs);
+	}	
 }
 
 // init
@@ -176,8 +196,10 @@ var init = function(doms){
 
 // API 
 
-  this.init = init 
-  this.down = down
+  this.init = init;
+  this.down = down;
+  this.left = left;
+  this.right = right;
 
 
 }
