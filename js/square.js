@@ -45,6 +45,8 @@ Square.prototype.canRight = function(isValid){
 	test.y = this.origin.y+1;
 	return isValid(test, this.data)
 } 
+
+
 Square.prototype.right = function(){
 	this.origin.y = this.origin.y + 1;
 } 
