@@ -186,6 +186,70 @@ var right = function(){
 	}	
 }
 
+// square fixed at the bottom when touched bottom
+
+var fixed = function(){
+
+	for(var i=0; i<cur.data.length; i++){
+		for(var j=0; j<cur.data[0].length; j++){
+			if(check(cur.origin, i , j)){
+				if(gameData[cur.origin.x + i][cur.origin.y + j] ==2) {
+					gameData[cur.origin.x + i][cur.origin.y + j] = 1;
+				}
+			}
+		}
+	}
+	refreshDiv(gameData,gameDivs);
+}
+
+// clear line function
+
+ var checkClear = function () {
+    var line = 0;
+    for (var i=gameData.length-1; i>=0; i--) { // 反过来遍历
+      var clear = true;
+      for (var j=0; j<gameData[0].length; j++) { // 判断一行是否可以清除
+        if (gameData[i][j] != 1) {
+          clear = false;
+          break;
+        }
+      }
+      if (clear) {
+        line++;
+        for (var m=i; m>0; m--) {
+          for (var n=0; n<gameData[0].length; n++) {
+            gameData[m][n] = gameData[m-1][n];
+          }
+        }
+        for (var n=0; n<gameData[0].length; n++) {
+          gameData[0][n] = 0;
+        }
+        i++;
+      }
+    }
+    return line;
+  }
+
+// check if game is over 
+
+var checkGameOver = function () {
+    var gameOver = false;
+    for (var i=0; i<gameData[0].length; i++) {
+      if (gameData[1][i] == 1) {
+        gameOver = true;
+      }
+    }
+    return gameOver;
+  }
+// use next square function
+
+	var performNext = function(type, dir){
+		cur = next; 
+		setData();
+		next = SquareFactory.prototype.make(type, dir);
+		refreshDiv(gameData, gameDivs);
+		refreshDiv(next.data, nextDivs);
+	}
 // init
 
 var init = function(doms){
@@ -217,7 +281,10 @@ var init = function(doms){
   this.rotate = rotate;
   this.fall = function(){
   	while(down());
-  }
-
+  };
+  this.fixed = fixed;
+  this.performNext = performNext;
+  this.checkClear = checkClear;
+  this.checkGameOver = checkGameOver;
 
 }

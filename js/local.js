@@ -2,6 +2,11 @@ var Local = function(){
 //  game object
 	var game;
 
+//  set interval 
+	var INTERVAL = 200;
+// set Timer
+	var timer = null;
+
 // bind key event
 	var bindKeyEvent = function(){
 		document.onkeydown = function(e){
@@ -26,6 +31,45 @@ var Local = function(){
 		}
 	}
 
+
+// move 
+
+	var move = function(){
+		if(!game.down()){
+			game.fixed();
+			game.checkClear();
+			var gameOver = game.checkGameOver();
+			if(gameOver){
+				stop();
+			} else {
+				game.performNext(generateType(), generateDir())
+			}
+			
+		};
+		
+	}
+
+// randomly generate square type
+
+  var generateType = function () {
+    return Math.ceil(Math.random() * 7) - 1; //0-6
+  }
+
+//  randomly generate a direction
+
+ var generateDir = function () {
+    return Math.ceil(Math.random() * 4) - 1; //0-4
+  }
+//  stop
+
+var stop = function () {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+    document.onkeydown = null;
+  }
+
 //  start
 	var start = function(){
 		var doms = {
@@ -36,6 +80,8 @@ var Local = function(){
 		game = new Game();
 		game.init(doms);
 		bindKeyEvent();
+		timer = setInterval(move, INTERVAL)
+
 	}
 
 	this.start = start
