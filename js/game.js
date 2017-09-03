@@ -70,6 +70,86 @@ var refreshDiv = function(data,divs){
 		}
 	}
 }
+// check available spot 
+
+var check = function(pos, x, y){
+
+	if(pos.x + x < 0 ){
+		return false;  
+	} else if (pos.x + x >= gameData.length){
+		return false 
+	} else if (pos.y + y < 0 ) {
+		return false; 
+	} else if (pos.y + y >= gameData[0].length){
+		return false; 
+	} else if (gameData[pos.x + x][pos.y + y] === 1){
+		return false; 
+
+	} else {
+		return true;
+	}
+
+} 
+
+// check data (if the square touched border)
+
+var isValid = function(pos, data) {
+	for(var i=0; i< cur.data[0].length; i++){
+		for(var j=0; j<cur.data[0].length; j++){
+			if(data[i][j] != 0){
+				if(!check(pos, i, j)){
+					return false; 
+				}
+			}
+		}
+	}
+	return true;
+}
+
+// clear data 
+
+var clearData = function(){
+	for(var i=0; i< cur.data[0].length; i++){
+		for(var j=0; j<cur.data[0].length; j++){
+
+			if( check(cur.origin, i, j)){
+
+				gameData[cur.origin.x + i][cur.origin.y + j] = 0;
+			}
+			
+		}
+	}
+
+}
+
+// set data 
+
+var setData = function(){
+
+	for(var i=0; i< cur.data[0].length; i++){
+		for(var j=0; j<cur.data[0].length; j++){
+
+			if( check(cur.origin, i, j)){ 
+			gameData[cur.origin.x + i][cur.origin.y + j] = cur.data[i][j];
+		}
+		}
+	}
+
+}
+
+//  down function 
+
+var down = function(){
+	if(cur.canDown(isValid)){
+
+		clearData();
+		cur.down();
+		setData();
+		refreshDiv(gameData,gameDivs);
+	}
+	
+
+}
 
 // init
 
@@ -82,6 +162,13 @@ var init = function(doms){
 	next = new Square(); 
 	initDiv(gameDiv, gameData, gameDivs);
 	initDiv(nextDiv, next.data, nextDivs);
+
+	cur.origin.x = 10;
+	cur.origin.y = 5;
+	
+	setData();
+
+
 	refreshDiv(gameData,gameDivs);
 	refreshDiv(next.data, nextDivs);
 
@@ -90,6 +177,7 @@ var init = function(doms){
 // API 
 
   this.init = init 
+  this.down = down
 
 
 }
