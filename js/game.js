@@ -2,6 +2,11 @@ var Game = function(){
 	// dom elements
 	var gameDiv;
 	var nextDiv;
+	var timeDiv;
+	var scoreDiv;
+	var resultDiv;
+
+	var score = 0; 
 
 	// game matrix
 
@@ -136,6 +141,17 @@ var setData = function(){
 	}
 
 }
+// rotate function 
+
+var rotate = function () {
+    if (cur.canRotate(isValid)) {
+      clearData();
+      cur.rotate();
+      setData();
+      refreshDiv(gameData, gameDivs);
+    }
+  }
+
 
 //  down function 
 
@@ -145,7 +161,11 @@ var down = function(){
 		cur.down();
 		setData();
 		refreshDiv(gameData,gameDivs);
-	}	
+		return true;
+
+	} else {
+		return false;
+	}
 }
 
 
@@ -171,25 +191,148 @@ var right = function(){
 	}	
 }
 
-// init
+// square fixed at the bottom when touched bottom
 
-var init = function(doms){
+var fixed = function(){
+
+	for(var i=0; i<cur.data.length; i++){
+		for(var j=0; j<cur.data[0].length; j++){
+			if(check(cur.origin, i , j)){
+				if(gameData[cur.origin.x + i][cur.origin.y + j] ==2) {
+					gameData[cur.origin.x + i][cur.origin.y + j] = 1;
+				}
+			}
+		}
+	}
+	refreshDiv(gameData,gameDivs);
+}
+
+// clear line function
+
+ var checkClear = function () {
+    var line = 0;
+    for (var i=gameData.length-1; i>=0; i--) { // 反过来遍历
+      var clear = true;
+      for (var j=0; j<gameData[0].length; j++) { // 判断一行是否可以清除
+        if (gameData[i][j] != 1) {
+          clear = false;
+          break;
+        }
+      }
+      if (clear) {
+        line++;
+        for (var m=i; m>0; m--) {
+          for (var n=0; n<gameData[0].length; n++) {
+            gameData[m][n] = gameData[m-1][n];
+          }
+        }
+        for (var n=0; n<gameData[0].length; n++) {
+          gameData[0][n] = 0;
+        }
+        i++;
+      }
+    }
+    return line;
+  }
+
+// check if game is over 
+
+var checkGameOver = function () {
+    var gameOver = false;
+    for (var i=0; i<gameData[0].length; i++) {
+      if (gameData[1][i] == 1) {
+        gameOver = true;
+      }
+    }
+    return gameOver;
+  }
+// use next square function
+
+	var performNext = function(type, dir){
+		cur = next; 
+		setData();
+		next = SquareFactory.prototype.make(type, dir);
+		refreshDiv(gameData, gameDivs);
+		refreshDiv(next.data, nextDivs);
+	}
+
+
+//  set time
+
+	var setTime = function(time){
+		timeDiv.innerHTML = time;
+	}
+
+//  score 
+
+var addScore = function(line){
+	var s = 0;
+	switch(line){
+	  case 1:
+		s=10;
+		break;
+	  case 2:
+		s=30;
+		break;
+	  case 3:
+		s=60;
+		break;
+	  case 4:
+		s=100;
+		break;
+	  default:
+	    break;
+	}
+	score = score + s;
+	scoreDiv.innerHTML = score;
+
+}
+
+// gameover 
+
+	var onGameover = function(win){
+		if(win){
+			resultDiv.innerHTML = "You Win!!!"
+		} else {
+			resultDiv.innerHTML = "You Lose:("
+		}
+
+	}
+
+// adding lines at bottom to make game harder
+	var addTailLines = function(lines){
+		for(var i=0;i< gameData.length - lines.length; i++){
+			gameData[i] = gameData[ i + lines.length];
+
+		}
+
+		for(var i=0; i< lines.length; i++){
+			gameData[gameData.length - lines.length + i] = lines[i];
+		}
+
+		cur.origin.x = cur.origin.x - lines.length;
+		if(cur.origin.x < 0){
+			cur.origin.x = 0;
+		}
+
+		refreshDiv(gameData, gameDivs);
+	}
+
+
+
+// init
+var init = function(doms,type, dir){
 
 	gameDiv = doms.gameDiv;
 	nextDiv = doms.nextDiv;
-
-	cur = new Square();
-	next = new Square(); 
+	timeDiv = doms.timeDiv;
+	scoreDiv = doms.scoreDiv;
+	resultDiv = doms.resultDiv;
+	next = SquareFactory.prototype.make(type, dir); 
 	initDiv(gameDiv, gameData, gameDivs);
 	initDiv(nextDiv, next.data, nextDivs);
 
-	cur.origin.x = 10;
-	cur.origin.y = 5;
-	
-	setData();
 
-
-	refreshDiv(gameData,gameDivs);
 	refreshDiv(next.data, nextDivs);
 
 }
@@ -200,6 +343,16 @@ var init = function(doms){
   this.down = down;
   this.left = left;
   this.right = right;
-
-
+  this.rotate = rotate;
+  this.fall = function(){
+  	while(down());
+  };
+  this.fixed = fixed;
+  this.performNext = performNext;
+  this.checkClear = checkClear;
+  this.checkGameOver = checkGameOver;
+  this.setTime = setTime;
+  this.addScore = addScore;
+  this.onGameover = onGameover;
+  this.addTailLines = addTailLines;
 }
