@@ -299,8 +299,28 @@ var addScore = function(line){
 
 	}
 
-// init
+// adding lines at bottom to make game harder
+	var addTailLines = function(lines){
+		for(var i=0;i< gameData.length - lines.length; i++){
+			gameData[i] = gameData[ i + lines.length];
 
+		}
+
+		for(var i=0; i< lines.length; i++){
+			gameData[gameData.length - lines.length + i] = lines[i];
+		}
+
+		cur.origin.x = cur.origin.x - lines.length;
+		if(cur.origin.x < 0){
+			cur.origin.x = 0;
+		}
+
+		refreshDiv(gameData, gameDivs);
+	}
+
+
+
+// init
 var init = function(doms,type, dir){
 
 	gameDiv = doms.gameDiv;
@@ -334,5 +354,5 @@ var init = function(doms,type, dir){
   this.setTime = setTime;
   this.addScore = addScore;
   this.onGameover = onGameover;
-
+  this.addTailLines = addTailLines;
 }

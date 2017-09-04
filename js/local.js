@@ -62,6 +62,20 @@ var Local = function(){
 		
 	}
 
+//  randomly generate lines 
+ 	var generateBottomLine = function(lineNum){
+ 		var lines =[];
+ 		for(var i =0; i< lineNum; i++){
+ 			var line = [];
+ 			for(var j=0; j< 10; j++){
+ 				line.push(Math.ceil(Math.random()*2)-1);
+ 			}
+ 			lines.push(line)
+ 		}
+
+ 		return lines;
+ 	}
+
 // timeFunc
 
 	var timeFunc = function(){
@@ -70,6 +84,9 @@ var Local = function(){
 			timeCount = 0;
 			time = time + 1
 			game.setTime(time);
+			if(time % 10 == 0){
+				game.addTailLines(generateBottomLine(1));
+			}
 		}
 	}
 
