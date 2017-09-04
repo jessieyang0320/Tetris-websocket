@@ -78,8 +78,9 @@ var stop = function () {
 		}
 
 		game = new Game();
-		game.init(doms);
+		game.init(doms, generateType(),generateDir());
 		bindKeyEvent();
+		game.performNext(generateType(),generateDir())
 		timer = setInterval(move, INTERVAL)
 
 	}

@@ -252,22 +252,16 @@ var checkGameOver = function () {
 	}
 // init
 
-var init = function(doms){
+var init = function(doms,type, dir){
 
 	gameDiv = doms.gameDiv;
 	nextDiv = doms.nextDiv;
 
-	cur = SquareFactory.prototype.make(2, 2);
-	next = SquareFactory.prototype.make(3, 3); 
+	next = SquareFactory.prototype.make(type, dir); 
 	initDiv(gameDiv, gameData, gameDivs);
 	initDiv(nextDiv, next.data, nextDivs);
 
 
-	
-	setData();
-
-
-	refreshDiv(gameData,gameDivs);
 	refreshDiv(next.data, nextDivs);
 
 }
