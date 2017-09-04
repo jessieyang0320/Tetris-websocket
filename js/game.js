@@ -3,6 +3,10 @@ var Game = function(){
 	var gameDiv;
 	var nextDiv;
 	var timeDiv;
+	var scoreDiv;
+	var resultDiv;
+
+	var score = 0; 
 
 	// game matrix
 
@@ -258,6 +262,43 @@ var checkGameOver = function () {
 	var setTime = function(time){
 		timeDiv.innerHTML = time;
 	}
+
+//  score 
+
+var addScore = function(line){
+	var s = 0;
+	switch(line){
+	  case 1:
+		s=10;
+		break;
+	  case 2:
+		s=30;
+		break;
+	  case 3:
+		s=60;
+		break;
+	  case 4:
+		s=100;
+		break;
+	  default:
+	    break;
+	}
+	score = score + s;
+	scoreDiv.innerHTML = score;
+
+}
+
+// gameover 
+
+	var onGameover = function(win){
+		if(win){
+			resultDiv.innerHTML = "You Win!!!"
+		} else {
+			resultDiv.innerHTML = "You Lose:("
+		}
+
+	}
+
 // init
 
 var init = function(doms,type, dir){
@@ -265,6 +306,8 @@ var init = function(doms,type, dir){
 	gameDiv = doms.gameDiv;
 	nextDiv = doms.nextDiv;
 	timeDiv = doms.timeDiv;
+	scoreDiv = doms.scoreDiv;
+	resultDiv = doms.resultDiv;
 	next = SquareFactory.prototype.make(type, dir); 
 	initDiv(gameDiv, gameData, gameDivs);
 	initDiv(nextDiv, next.data, nextDivs);
@@ -289,5 +332,7 @@ var init = function(doms,type, dir){
   this.checkClear = checkClear;
   this.checkGameOver = checkGameOver;
   this.setTime = setTime;
+  this.addScore = addScore;
+  this.onGameover = onGameover;
 
 }

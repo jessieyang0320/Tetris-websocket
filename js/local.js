@@ -46,9 +46,13 @@ var Local = function(){
 		timeFunc();
 		if(!game.down()){
 			game.fixed();
-			game.checkClear();
+			var line = game.checkClear();
+			if(line){
+				game.addScore(line)
+			}
 			var gameOver = game.checkGameOver();
 			if(gameOver){
+				game.onGameover(false);
 				stop();
 			} else {
 				game.performNext(generateType(), generateDir())
@@ -96,7 +100,9 @@ var stop = function () {
 		var doms = {
 			gameDiv: document.getElementById('game'),
 			nextDiv: document.getElementById('next'),
-			timeDiv: document.getElementById('time')
+			timeDiv: document.getElementById('time'),
+			scoreDiv:document.getElementById('score'),
+			resultDiv:document.getElementById('gameover')
 		}
 
 		game = new Game();
