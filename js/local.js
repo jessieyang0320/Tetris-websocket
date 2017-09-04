@@ -7,6 +7,14 @@ var Local = function(){
 // set Timer
 	var timer = null;
 
+// time calculator
+	var timeCount = 0;
+
+// time used
+	var time = 0;
+
+
+
 // bind key event
 	var bindKeyEvent = function(){
 		document.onkeydown = function(e){
@@ -35,6 +43,7 @@ var Local = function(){
 // move 
 
 	var move = function(){
+		timeFunc();
 		if(!game.down()){
 			game.fixed();
 			game.checkClear();
@@ -48,6 +57,18 @@ var Local = function(){
 		};
 		
 	}
+
+// timeFunc
+
+	var timeFunc = function(){
+		timeCount = timeCount + 1;
+		if(timeCount ==5){
+			timeCount = 0;
+			time = time + 1
+			game.setTime(time);
+		}
+	}
+
 
 // randomly generate square type
 
@@ -74,7 +95,8 @@ var stop = function () {
 	var start = function(){
 		var doms = {
 			gameDiv: document.getElementById('game'),
-			nextDiv: document.getElementById('next')
+			nextDiv: document.getElementById('next'),
+			timeDiv: document.getElementById('time')
 		}
 
 		game = new Game();

@@ -2,6 +2,7 @@ var Game = function(){
 	// dom elements
 	var gameDiv;
 	var nextDiv;
+	var timeDiv;
 
 	// game matrix
 
@@ -250,13 +251,20 @@ var checkGameOver = function () {
 		refreshDiv(gameData, gameDivs);
 		refreshDiv(next.data, nextDivs);
 	}
+
+
+//  set time
+
+	var setTime = function(time){
+		timeDiv.innerHTML = time;
+	}
 // init
 
 var init = function(doms,type, dir){
 
 	gameDiv = doms.gameDiv;
 	nextDiv = doms.nextDiv;
-
+	timeDiv = doms.timeDiv;
 	next = SquareFactory.prototype.make(type, dir); 
 	initDiv(gameDiv, gameData, gameDivs);
 	initDiv(nextDiv, next.data, nextDivs);
@@ -280,5 +288,6 @@ var init = function(doms,type, dir){
   this.performNext = performNext;
   this.checkClear = checkClear;
   this.checkGameOver = checkGameOver;
+  this.setTime = setTime;
 
 }
