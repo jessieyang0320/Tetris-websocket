@@ -115,11 +115,11 @@ var stop = function () {
 //  start
 	var start = function(){
 		var doms = {
-			gameDiv: document.getElementById('game'),
-			nextDiv: document.getElementById('next'),
-			timeDiv: document.getElementById('time'),
-			scoreDiv:document.getElementById('score'),
-			resultDiv:document.getElementById('gameover')
+			gameDiv: document.getElementById('local_game'),
+			nextDiv: document.getElementById('local_next'),
+			timeDiv: document.getElementById('local_time'),
+			scoreDiv:document.getElementById('local_score'),
+			resultDiv:document.getElementById('local_gameover')
 		}
 
 		game = new Game();
