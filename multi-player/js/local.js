@@ -1,4 +1,4 @@
-var Local = function(){
+var Local = function(socket){
 //  game object
 	var game;
 

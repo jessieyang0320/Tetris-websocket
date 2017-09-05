@@ -7,6 +7,7 @@
 </head>
 <body>
 	<div>Directions: up->rotate, left-> turn left, right-< turn right, space-> down</div>
+	<div id="waiting"></div>
 	<div class="square" id="local">
 		<div class="title">My Game Area</div>
 		<div class="game" id="local_game"></div>
@@ -31,7 +32,8 @@
 
 
 
-
+	<script type="text/javascript" src="js/socket.io.js"></script>
+	<script type="text/javascript" src="js/remote.js"></script>
 	<script type="text/javascript" src="js/square.js"></script>
 	<script type="text/javascript" src="js/squareFactory.js"></script>
 	<script type="text/javascript" src="js/game.js"></script>

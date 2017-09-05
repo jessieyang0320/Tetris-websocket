@@ -1,4 +1,4 @@
-var Remote = function(){
+var Remote = function(socket){
 	// game object
 	var game;
 
