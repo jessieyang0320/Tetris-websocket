@@ -3,7 +3,7 @@ var Local = function(socket){
 	var game;
 
 //  set interval 
-	var INTERVAL = 200;
+	var INTERVAL = 2000;
 // set Timer
 	var timer = null;
 
@@ -20,20 +20,25 @@ var Local = function(socket){
 		document.onkeydown = function(e){
 			if(e.keyCode === 38) { //up
 				game.rotate();
+				socket.emit('rotate');
 
 			} else if (e.keyCode === 39){ //right
 				game.right();
+				socket.emit('right');
 
 			} else if (e.keyCode === 40){ // down
 
 				game.down();
+				socket.emit('down');
 
 			} else if (e.keyCode === 37){ //left
 
 				game.left();
+				socket.emit('left');
 
 			} else if (e.keyCode === 32){// space 
 				game.fall();
+				socket.emit('fall');
 
 			}
 		}
@@ -46,19 +51,32 @@ var Local = function(socket){
 		timeFunc();
 		if(!game.down()){
 			game.fixed();
+			socket.emit('fixed');
 			var line = game.checkClear();
 			if(line){
 				game.addScore(line)
+				socket.emit('line',line);
+				if(line>1){
+					var bottomLines = generateBottomLine(line);
+					socket.emit('bottomLines',bottomLines);
+				}
 			}
 			var gameOver = game.checkGameOver();
 			if(gameOver){
 				game.onGameover(false);
+				document.getElementById('remote_gameover').innerHTML = 'You Win!!'
+				socket.emit('lose')
 				stop();
 			} else {
-				game.performNext(generateType(), generateDir())
+				var t = generateType();				
+				var d = generateDir();
+				game.performNext(t,d);
+				socket.emit('next',{type:t, dir: d})
 			}
 			
-		};
+		} else {
+			socket.emit('down')
+		}
 		
 	}
 
@@ -84,9 +102,8 @@ var Local = function(socket){
 			timeCount = 0;
 			time = time + 1
 			game.setTime(time);
-			if(time % 10 == 0){
-				game.addTailLines(generateBottomLine(1));
-			}
+			socket.emit('time',time)
+			
 		}
 	}
 
@@ -123,12 +140,40 @@ var stop = function () {
 		}
 
 		game = new Game();
-		game.init(doms, generateType(),generateDir());
+		var type = generateType();
+		var dir = generateDir();
+		game.init(doms, type, dir);
+		socket.emit('init',{type:type, dir:dir})
+
 		bindKeyEvent();
-		game.performNext(generateType(),generateDir())
+
+		var t = generateType();				
+		var d = generateDir();
+		game.performNext(t,d);
+		socket.emit('next',{type:t, dir: d})
+
 		timer = setInterval(move, INTERVAL)
 
 	}
 
-	this.start = start
+	socket.on('start',function(){
+		document.getElementById('waiting').innerHTML = '';
+		start();
+
+	});
+	socket.on('lose', function(){
+		game.onGameover(true);
+		stop();
+	});
+
+	socket.on('leave', function(){
+		document.getElementById('local_gameover').innerHTML = 'the other player is offline';
+		document.getElementById('remote_gameover').innerHTML = 'you are offline now';
+		stop();
+	});
+	socket.on('bottomLines', function(data){
+		game.addTailLines(data);
+		socket.emit('addTailLines',data)
+	})		
+
 }

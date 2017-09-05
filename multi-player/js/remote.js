@@ -5,9 +5,44 @@ var Remote = function(socket){
 	// bind events 
 
 	var bindEvents = function(){
-		document.getElementById('left').onclick = function(){
-			game.left()
-		}
+		socket.on('init',function(data){
+			start(data.type, data.dir);
+		});
+
+		socket.on('next',function(data){
+			game.performNext(data.type, data.dir);
+		});
+		socket.on('rotate',function(data){
+			game.rotate();
+		});
+		socket.on('right',function(data){
+			game.right();
+		});
+		socket.on('down',function(data){
+			game.down();
+		});
+		socket.on('left',function(data){
+			game.left();
+		});
+		socket.on('fall',function(data){
+			game.fall();
+		});
+		socket.on('fixed',function(data){
+			game.fixed();
+		});
+		socket.on('line',function(data){
+			game.checkClear();
+			game.addScore(data)
+		});
+		socket.on('time',function(data){
+			game.setTime(data)
+		});
+		socket.on('lose',function(data){
+			game.onGameover(false);
+		});
+		socket.on('bottomLines',function(data){
+			game.addTailLines(data);
+		});
 	}
 
 	// start
@@ -28,7 +63,5 @@ var Remote = function(socket){
 
 	}
 
-// API
-	this.start = start;
-	this.bindEvents = bindEvents;
+	bindEvents();
 }
