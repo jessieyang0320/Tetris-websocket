@@ -1,8 +1,29 @@
-/*body {
-	background-image: url(./assets/tetris.jpg);
-}*/
+body {
+	font-family: VT323;
+
+}
 .welcome-page {
 	width: 80%;
+	height: 100vh;
 	margin: 200px auto 0 auto;
-	
+	background-image: url(./assets/tetris.jpg);
+	position: fixed;	 
+    z-index: -99; 
+    top: -130px;
+    left: 10vw;
+    width: 80vw;
+    height:80vh;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 50px;
+
+}
+
+button {
+	display: inline-block;
+	color: white;
+}
+
+h2 {
+	font-size: 50px;
 }
