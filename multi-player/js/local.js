@@ -156,9 +156,30 @@ var stop = function () {
 
 	}
 
+	 var onlineStatus = true;
+
 	socket.on('start',function(){
 		document.getElementById('waiting').innerHTML = '';
-		start();
+		document.getElementById('mask_title_wrap').style.display = 'none';
+    	document.getElementById('countdown_wrap').style.display = 'block';
+
+    // counting down to begin the game
+    var count = 4;
+    var timer = setInterval(function () {
+      if (onlineStatus) {
+        if (count == 0) {
+          document.getElementById('mask').style.display = 'none';
+          clearInterval(timer);
+          start();
+        }
+        document.getElementById('countdown').innerHTML = count--;
+      } else {
+        document.getElementById('mask_title_wrap').style.display = 'block';
+        document.getElementById('mask_title').innerHTML = '对方掉线<a href="javascript:;" onclick="location.reload()">[Connecting...]</a>';
+        document.getElementById('countdown_wrap').style.display = 'none';
+        clearInterval(timer);
+      }
+    }, 1000);
 
 	});
 	socket.on('lose', function(){
@@ -169,6 +190,8 @@ var stop = function () {
 	socket.on('leave', function(){
 		document.getElementById('local_gameover').innerHTML = 'the other player is offline';
 		document.getElementById('remote_gameover').innerHTML = 'you are offline now';
+		document.getElementById('mask_title').innerHTML = 'The other player is offline<a href="javascript:;" onclick="location.reload()">[Connecting...]</a>';
+    onlineStatus = false;
 		stop();
 	});
 	socket.on('bottomLines', function(data){
